@@ -1,0 +1,64 @@
+apply plugin: 'com.android.application'
+
+android {
+    namespace 'com.anubhav.edgeviewer'
+    compileSdkVersion 33
+
+    defaultConfig {
+        applicationId "com.anubhav.edgeviewer"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14"
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
+    packaging {
+        resources {
+            excludes += ['META-INF/native-image/**']
+            pickFirsts += ['lib/**/libopencv_java4.so']
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.camera:camera-camera2:1.2.0'
+    implementation 'androidx.camera:camera-lifecycle:1.2.0'
+    implementation 'androidx.camera:camera-view:1.2.0'
+    implementation 'org.bytedeco:javacv:1.5.9'
+    implementation 'org.bytedeco:opencv:4.7.0-1.5.9'
+    implementation 'org.bytedeco:opencv-platform:4.7.0-1.5.9'
+}
